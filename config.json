@@ -1,0 +1,10 @@
+{
+	"discord_token" : "TOKEN",
+    "shards": {
+        "count": 1,
+        "first_shard_id": 0,
+        "last_shard_id": 0
+    },
+    "siffredi_footer" : "siffredi.vpsgh.it - Siffredi Bot",
+    "fun_guild_id" : ""
+}
