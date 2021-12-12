@@ -35,7 +35,7 @@ pip install asyncpg
 
 ## 📺 Demo
 <!-- Add a Screenshot/GIF showing the sample use of the script (jpeg/png/gif). -->
-<a href="https://www.siffredi.altervista.com">
+<a href="https://siffredi.altervista.com">
   <img src="https://code.visualstudio.com/assets/docs/python/tutorial/intellisense01.png" />
 </a>
 ## 🤖 Author
