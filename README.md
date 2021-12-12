@@ -36,12 +36,12 @@ pip install asyncpg
 ## 📺 Demo
 <!-- Add a Screenshot/GIF showing the sample use of the script (jpeg/png/gif). -->
 <a href="https://siffredi.altervista.com">
-  <img src="https://code.visualstudio.com/assets/docs/python/tutorial/intellisense01.png" />
+  <img src="https://siffredi.altervista.org/assets/svg/siffredi-bot-black.svg" />
 </a>
 
 ## 🤖 Author 
 <!--Remove the below lines and add yours -->
 <a href="https://www.raulcarini.com">
-  <img align="left" alt="Raul Carini" width="55px" src="https://siffredi.altervista.org/assets/svg/siffredi-bot-black.svg" />
+  <img align="left" alt="Raul Carini" width="55px" src="https://www.raulcarini.com/assets/img/profilo1.png" />
 </a>
 Raul Carini
