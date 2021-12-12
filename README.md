@@ -38,7 +38,8 @@ pip install asyncpg
 <a href="https://siffredi.altervista.com">
   <img src="https://code.visualstudio.com/assets/docs/python/tutorial/intellisense01.png" />
 </a>
-## 🤖 Author
+
+## 🤖 Author 
 <!--Remove the below lines and add yours -->
 <a href="https://www.raulcarini.com">
   <img align="left" alt="Raul Carini" width="55px" src="https://www.raulcarini.com/assets/img/profilo1.png" />
