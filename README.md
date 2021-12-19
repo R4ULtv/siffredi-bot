@@ -12,7 +12,7 @@ You can copy paste my markdown photo insert as following:
 
 ## 🛠️ Description
 <!--Remove the below lines and add yours -->
-The best SIMPLE bot for Discord.
+The best SIMPLE bot for Discord.<br>
 Bot is a multi-purpose bot ready to skill up and boost up your Discord server
 Moderator, Music, Poll, Meme Creator, Fun, Economy and much more.
 
