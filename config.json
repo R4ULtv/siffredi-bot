@@ -1,0 +1,13 @@
+{
+	"discord_token" : "TOKEN",
+    "shards": {
+        "count": 1,
+        "first_shard_id": 0,
+        "last_shard_id": 0
+    },
+    "siffredi_footer" : "EMBED FOOTER",
+    "fun_guild_id" : "ID",
+    "ftp-host" : "HOST",
+    "ftp-user" : "USERNAME",
+    "ftp-pass" : "PASSWORD"
+}
