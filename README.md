@@ -44,6 +44,6 @@ pip install asyncpg
 ## 🤖 Author 
 <!--Remove the below lines and add yours -->
 <a href="https://www.raulcarini.com">
-  <img align="left" alt="Raul Carini" width="55px" src="https://www.raulcarini.com/assets/img/profilo1.png" />
+  <img align="left" alt="Raul Carini" width="55px" src="https://avatars.githubusercontent.com/u/85316240" />
 </a>
 Raul Carini
