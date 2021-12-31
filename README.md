@@ -23,16 +23,19 @@ Install [Python 3.8](https://www.python.org/downloads/)
 ## 🌟 How to run
 <!--Remove the below lines and add yours -->
 ``` bash
-
+# bot.py prompts you need to install:
 pip install discord.py
+pip install aiohttp
+pip install rich
 
+# muscic.py prompts you need to install:
 pip install discord.py[voice]
-
 pip install youtube_dl
 
-pip install aiohttp
-
-pip install asyncpg
+# utilities.py prompts you need to install:
+pip install bs4
+pip install requests
+pip install forex_python
 ```
 
 ## 📺 Demo
