@@ -28,7 +28,7 @@ pip install discord.py
 pip install aiohttp
 pip install rich
 
-# muscic.py prompts you need to install:
+# music.py prompts you need to install:
 pip install discord.py[voice]
 pip install youtube_dl
 
