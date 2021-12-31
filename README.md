@@ -29,12 +29,12 @@ pip install aiohttp
 pip install rich
 ```
 #### music.py prompts you need to install:
-```
+``` bash
 pip install discord.py[voice]
 pip install youtube_dl
 ```
 #### utilities.py prompts you need to install:
-```
+``` bash
 pip install bs4
 pip install requests
 pip install forex_python
