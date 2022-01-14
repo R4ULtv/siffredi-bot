@@ -18,7 +18,7 @@ Moderator, Music, Poll, Meme Creator, Fun, Economy and much more.
 
 ## ⚙️ Languages or Frameworks Used
 <!--Remove the below lines and add yours -->
-Minimum: install [Python 3.8](https://www.python.org/downloads/release/python-3812/)
+Minimum: install [Python 3.8](https://www.python.org/downloads/release/python-3812/)    
 Racommended: install the last version of [Python](https://www.python.org/downloads/)
 
 ## 🌟 How to run
