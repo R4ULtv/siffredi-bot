@@ -45,7 +45,7 @@ pip install forex_python
 ## 📺 Demo
 <!-- Add a Screenshot/GIF showing the sample use of the script (jpeg/png/gif). -->
 <a href="https://siffredi.altervista.com">
-  <img src="https://siffredi.altervista.org/assets/svg/siffredi-bot-black.svg" />
+  <img src="https://media.giphy.com/media/oMmbMhqwBlNYlbCEI5/giphy.gif" />
 </a>
 
 ## 🤖 Author 
