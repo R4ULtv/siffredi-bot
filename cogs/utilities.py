@@ -7,10 +7,8 @@ import random
 import string
 from forex_python.converter import CurrencyRates
 
-from discord.ext import commands, tasks
-from random import choice
+from discord.ext import commands
 
-from discord.ext.commands.core import command
 import time
 from discord.ext.commands.cooldowns import BucketType
 

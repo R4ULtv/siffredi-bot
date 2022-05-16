@@ -1,30 +1,32 @@
-import logging
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 import aiohttp
 import os
 import json
 import time
-
+import mysql.connector
 from rich.progress import track
-from rich.console import Console
-from random import choice
 
 from logs import DiscordLogs
 
-def get_prefix(client, message):
-    with open("prefixes.json", 'r') as f:
-        prefixes = json.load(f)
+# CONFIG FILE
+with open('config.json') as config_file:
+    config = json.load(config_file)
 
-    return prefixes[str(message.guild.id)]
+def get_prefix(client, message):
+    mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT prefix FROM main_guilds WHERE guild_id=%s", (str(message.guild.id),))
+    prefix = mycursor.fetchall()
+    return prefix[0]
 
 class SiffrediBot(commands.AutoShardedBot):
     def __init__(self, config):
         super().__init__(
             command_prefix = get_prefix,
             status = discord.Status.online,
-            activity=discord.Game('-help | siffredi.altervista.org'))
+            activity = discord.Game('-help'))
         self.config = config
         self.shard_count = self.config["shards"]["count"]
         shard_ids_list = []

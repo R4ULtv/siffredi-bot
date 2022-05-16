@@ -1,0 +1,8 @@
+discord.py[voice]
+rich
+youtube-dl
+aiohttp
+bs4
+requests
+forex_python
+mysql.connector

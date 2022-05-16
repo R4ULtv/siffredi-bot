@@ -1,9 +1,7 @@
 import discord
-from discord import channel
 from discord.ext import commands
-from discord.utils import get
 import json
-from ftplib import FTP
+import mysql.connector
 
 # CONFIG FILE
 with open('config.json') as config_file:
@@ -57,84 +55,30 @@ class Owner(commands.Cog):
             title = '',
             description = "I'm in **" + str(len(self.bot.guilds)) + "** servers",
         )
-        await ctx.send(embed= embed)
+        await ctx.send(embed= embed)    
 
-    @commands.command(name="sid")
+    @commands.command(name="guilds", hidden=True)
     @commands.is_owner()
-    async def server_id(self, ctx):
-        for guild in self.bot.guilds:
-            embed = discord.Embed(
-                title = '',
-                description = f"Server Name = **{guild.name}**\n Server Id = **{guild.id}**",
-            )
-            await ctx.send(embed= embed)
-
-    @commands.command(name='data')
-    @commands.is_owner()
-    async def data(self, ctx):
+    async def guilds(self, ctx):
         guilds = self.bot.guilds
-        members = 0
-        channel = 0
         for guild in guilds:
-            members += guild.member_count
-            channel += len(guild.text_channels)
+            print(guild.name, guild.id, guild.icon, guild.member_count)
+        await ctx.send('Guilds updated.')
 
-        with open("data.json", 'r') as f:
-                data = json.load(f)
-
-        data = {"servers":  len(guilds), "users": members, "channels": channel}
-
-        with open('data.json', 'w') as f:
-            json.dump(data, f,indent=4)
-
-        message = await ctx.send("`Generated File`")
-
-        ftp = FTP(host=config["ftp-host"], encoding='latin-1')
-        ftp.login(user=config["ftp-user"], passwd=config["ftp-pass"]) 
-        ftp.cwd('assets/json')
-        with open('data.json', 'rb') as fp:
-            ftp.storbinary('STOR data.json', fp)
-        await message.edit("`Uploaded File`")
-        ftp.quit()
-
-    @commands.command(name='commands')
+    @commands.command(name='commands', hidden=True)
     @commands.is_owner()
     async def commands(self, ctx):
 
-        commands_name = []
-        commands_help = []
-        commands_aliases = []
-        commands_cog_name = []
-        commands_usage = []
-        commands_perm = []
+        mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+        mycursor = mydb.cursor()
 
+        id = 1
         for cmd in self.bot.commands:
-            commands_name.append(cmd.name)
-            commands_help.append(cmd.help)
-            commands_aliases.append(cmd.aliases)
-            commands_cog_name.append(cmd.cog_name)
-            commands_usage.append(cmd.usage)
-            commands_perm.append(cmd.brief)
-
-        # commands_name.sort()
-
-        with open("commands.json", 'r') as f:
-            commands_ = json.load(f)
-
-        commands_ = {"name":  commands_name, "description": commands_help, "syntax": commands_usage, "type" : commands_cog_name, "aliases" : commands_aliases}
-
-        with open('commands.json', 'w') as f:
-            json.dump(commands_, f,indent=4)
-
-        message = await ctx.send("`Generated File`")
-
-        ftp = FTP(host=config["ftp-host"], encoding='latin-1')
-        ftp.login(user=config["ftp-user"], passwd=config["ftp-pass"]) 
-        ftp.cwd('assets/json')
-        with open('commands.json', 'rb') as fp:
-            ftp.storbinary('STOR commands.json', fp)
-        await message.edit("`Uploaded File`")
-        ftp.quit()
+            id += 1
+            sql = "INSERT INTO commands_command (id, name, description, syntax, type, aliases) VALUES (%s, %s, %s, %s, %s, %s)"
+            val = (int(id), str(cmd.name), str(cmd.help), str(cmd.usage), str(cmd.cog_name), str(cmd.aliases))
+            mycursor.execute(sql, val)
+            mydb.commit()
 
 def setup(bot):
     bot.add_cog(Owner(bot))

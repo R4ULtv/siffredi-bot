@@ -1,13 +1,13 @@
 import discord
 import json
 import math
-import youtube_dl
-from discord.ext import commands, tasks
-
-import logging
-import sys
-
+from discord.ext import commands
+import mysql.connector
 from logs import DiscordLogs
+
+# CONFIG FILE
+with open('config.json') as config_file:
+    config = json.load(config_file)
 
 class Events(commands.Cog):
 
@@ -16,23 +16,17 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        with open("prefixes.json", 'r') as f:
-            prefixes = json.load(f)
-
-        prefixes[str(guild.id)] = '-'
-
-        with open('prefixes.json', 'w') as f:
-            json.dump(prefixes, f ,indent=4)
+        mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+        mycursor = mydb.cursor()
+        mycursor.execute("INSERT INTO main_guilds (guild_id, guild_name, guild_icon_id, prefix) VALUES (%s, %s, %s,'-')", (str(guild.id), guild.name, guild.icon))
+        mydb.commit()
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-
-        prefixes.pop(str(guild.id))
-
-        with open('prefixes.json', 'w') as f:
-            json.dump(prefixes, f ,indent=4)
+        mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+        mycursor = mydb.cursor()
+        mycursor.execute("DELETE FROM main_guilds WHERE guild_id=%s", (str(guild.id),))
+        mydb.commit()
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -76,9 +70,7 @@ class Events(commands.Cog):
             logger.warning(error)
 
             embed.add_field(name = f':x: Terminal Error', value = f"```{error}``` [Join the Support Server for Help](https://siffredi.altervista.org/redirect/support)", inline=False)
-            await ctx.send(embed = embed)
-            # raise error
-        
+            await ctx.send(embed = embed)  
 
 def setup(bot):
     bot.add_cog(Events(bot))

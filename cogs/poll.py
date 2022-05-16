@@ -1,10 +1,9 @@
 import discord
-import asyncio
 from discord.ext import commands
-import random
 import json
 from discord.ext.commands.cooldowns import BucketType
 
+# CONFIG FILE
 with open('config.json') as config_file:
     config = json.load(config_file)
 

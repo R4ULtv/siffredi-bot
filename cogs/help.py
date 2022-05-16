@@ -3,8 +3,7 @@ import discord
 import json
 import datetime
 from discord.utils import get
-from discord.ext.commands.cooldowns import BucketType
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 # CONFIG FILE
 with open('config.json') as config_file:

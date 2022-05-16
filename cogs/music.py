@@ -429,14 +429,5 @@ class Music(commands.Cog):
 
         await self.cleanup(ctx.guild)
 
-    
-#    async def cog_command_error(self, ctx, error):
-#        embed = discord.Embed(
-#        title='',
-#        color=discord.Color.red())
-#        if isinstance(error, InvalidVoiceChannel):
-#            embed.add_field(name=f'Invalid Voice Channel', value=f'{error}')
-#            await ctx.send(embed=embed)
-
 def setup(bot):
     bot.add_cog(Music(bot))

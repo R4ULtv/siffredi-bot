@@ -1,10 +1,8 @@
-﻿from os import name
-import discord
+﻿import discord
 import json
-import time
-import datetime
+import mysql.connector
 from discord.ext.commands.cooldowns import BucketType
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 # CONFIG FILE
 with open('config.json') as config_file:
@@ -20,13 +18,10 @@ class Moderator(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix):
         """You can change the bot prefix for your server"""
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-
-        prefixes[str(ctx.guild.id)] = prefix
-
-        with open('prefixes.json', 'w') as f:
-            json.dump(prefixes, f ,indent=4)
+        mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+        mycursor = mydb.cursor()
+        mycursor.execute("UPDATE main_guilds SET prefix=%s WHERE guild_id=%s", (prefix, str(ctx.guild.id)))
+        mydb.commit()
 
         embed = discord.Embed(
             title= "The bot prefix has changed",
