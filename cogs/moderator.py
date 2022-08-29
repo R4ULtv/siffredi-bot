@@ -16,7 +16,7 @@ class Moderator(commands.Cog):
     @commands.cooldown(2,300,BucketType.user) 
     @commands.command(name="prefix", usage="-prefix [!]")
     @commands.has_permissions(administrator=True)
-    async def prefix(self, ctx, prefix):
+    async def prefix(self, ctx, prefix:str):
         """You can change the bot prefix for your server"""
         mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
         mycursor = mydb.cursor()
@@ -31,7 +31,7 @@ class Moderator(commands.Cog):
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 
-    @commands.cooldown(2,300,BucketType.user) 
+    @commands.cooldown(2,150,BucketType.user) 
     @commands.command(name="kick", usage="-kick [member] Optional[reason]")
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member, *, reason=None):
@@ -60,7 +60,7 @@ class Moderator(commands.Cog):
         await member.ban(reason=reason)
         await ctx.send(embed=embed)
 
-    @commands.cooldown(2,300,BucketType.user) 
+    @commands.cooldown(2,150,BucketType.user) 
     @commands.command(name="unban", usage="-unban [member]")
     @commands.has_permissions(administrator=True)
     async def unban(self, ctx, *, member):
@@ -87,9 +87,14 @@ class Moderator(commands.Cog):
         if amount < 500:
             await ctx.channel.purge(limit=amount+1)
         else:
-            await ctx.send("too many numbers I can't do it, Max 500")
+            embed= discord.Embed(
+                title=':warning: Error:',
+                description= f'You can only delete 500 messages at a time',
+                colour= discord.Color.red()
+            )
+            await ctx.send(embed=embed)
 
-    @commands.cooldown(3,60,BucketType.user) 
+    @commands.cooldown(2,60,BucketType.user) 
     @commands.command(name="info", usage="-info [server/user] Optional[@user]")
     @commands.has_permissions(administrator=True)
     async def info(self, ctx, info, user: discord.Member = None):
@@ -129,7 +134,7 @@ class Moderator(commands.Cog):
     async def ticket(self, ctx , *, arg):
         """You can create a ticket"""
         embed= discord.Embed(
-            title='Richiesta Ticket', 
+            title='Ticket Request', 
             description= f' :arrow_forward: {arg} \n by [<@{ctx.author.id}>]', 
             colour= discord.Color.purple()
         )

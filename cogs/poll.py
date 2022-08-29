@@ -68,7 +68,7 @@ class Poll(commands.Cog):
     
     #@commands.Cog.listener()
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="poll", usage="-poll [title] Optional[Optiona1] Optional[Optiona2]")
+    @commands.command(name="poll", usage="-poll {title} Optional[Optiona1] Optional[Optiona2]")
     # Limit how often a command can be used, (num per, seconds, BucketType.default/user/member/guild/channel/role)
     async def poll(self, ctx):
         """You can create a poll"""

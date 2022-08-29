@@ -1,21 +1,19 @@
 import discord
 import json
-from bs4 import BeautifulSoup
-import requests
-
 import random
 import string
 from forex_python.converter import CurrencyRates
-
-from discord.ext import commands
-
 import time
+import urllib.request, json 
+from datetime import datetime, timezone
+
 from discord.ext.commands.cooldowns import BucketType
+from discord.ext import commands
+import requests
 
 # CONFIG FILE
 with open('config.json') as config_file:
     config = json.load(config_file)
-
 
 class Utilities(commands.Cog):
 
@@ -74,39 +72,28 @@ class Utilities(commands.Cog):
         embed.set_footer(text=config["siffredi_footer"]) 
         await ctx.send(embed=embed)
 
+    @commands.cooldown(2,60,BucketType.user) 
     @commands.command(name='weather', aliases=['wth'], usage="-weather [city]")
-    async def weather(self, ctx, city: str):
+    async def weather(self, ctx, city:str):
         """You can view the weather of the city you want"""
-        city=city + " weather"
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-        city=city.replace(" ","+")
-
-        res = requests.get(f'https://www.google.com/search?q={city}&oq={city}&aqs=chrome.0.35i39l2j0l4j46j69i60.6128j1j7&sourceid=chrome&ie=UTF-8',headers=headers)
-        soup = BeautifulSoup(res.text,'html.parser')   
-
-        location = soup.select('#wob_loc')[0].getText().strip()  
-        time = soup.select('#wob_dts')[0].getText().strip()       
-        info = soup.select('#wob_dc')[0].getText().strip() 
-        weather = soup.select('#wob_tm')[0].getText().strip()
-        rainfall = soup.select('#wob_pp')[0].getText().strip()
-        humidity = soup.select('#wob_hm')[0].getText().strip()
-        wind = soup.select('#wob_ws')[0].getText().strip()
-
-        embed= discord.Embed(
-                title='Siffredi Weather', 
-                description= f'', 
-                colour= discord.Color.purple()
-            )
-        embed.add_field(name='Location', value=location)
-        embed.add_field(name='Time', value=time)
-        embed.add_field(name='Info', value=info)
-        embed.add_field(name='Weather', value=weather+"°C")
-        embed.add_field(name='Precipitazioni', value=rainfall)
-        embed.add_field(name='Umidità', value=humidity)
-        embed.add_field(name='Vento', value=wind)
+        with urllib.request.urlopen(f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={config["owak"]}') as url:
+            data = json.loads(url.read().decode())
+        embed= discord.Embed(colour= discord.Color.purple())
+        embed.set_author(name="OpenWeatherMap", url="https://openweathermap.org/")
+        embed.set_thumbnail(url=f'https://openweathermap.org/img/w/{data["weather"][0]["icon"]}.png')
+        embed.add_field(name='Location', value=data['name'] + ', ' + data['sys']['country'])
+        embed.add_field(name="Time", value=datetime.fromtimestamp(data['dt'], tz=timezone.utc).strftime('%H:%M:%S') + " UTC")
+        embed.add_field(name='Weather', value=data['weather'][0]['main'] + ": " + data['weather'][0]['description'])
+        embed.add_field(name='Temperature', value=str(int(data['main']['temp'])) + "°C")
+        embed.add_field(name='Pressure', value=str(data['main']['pressure']) + " hPa")
+        embed.add_field(name='Humidity', value=str(data['main']['humidity']) + "%")
+        embed.add_field(name='Wind', value=str(data['wind']['speed']) + " m/s")
+        embed.add_field(name='Visibility', value=str(data['visibility']) + " m")
+        embed.add_field(name='Coordinates', value=str(data['coord']['lat']) + "°N" + " " + str(data['coord']['lon']) + "°E")
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 
+    @commands.cooldown(2,60,BucketType.user) 
     @commands.command(name="password", usage="-password [lenght]", aliases=['psw'])
     async def password(self, ctx, length: int):
         """You can generate a password of the length you want"""
@@ -119,6 +106,7 @@ class Utilities(commands.Cog):
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 
+    @commands.cooldown(2,60,BucketType.user) 
     @commands.command(name="dice", usage="-dice")
     async def dice(self, ctx):
         """Generates a number between 1 and 6"""
@@ -131,6 +119,7 @@ class Utilities(commands.Cog):
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 
+    @commands.cooldown(2,60,BucketType.user) 
     @commands.command(name="convert", usage="-convert [from currency] [to currency]", aliases=['cc','currency'])
     async def convert(self, ctx, amount: int, from_currency: str, to_currency: str):
         """You can convert one currency to another"""
@@ -145,6 +134,52 @@ class Utilities(commands.Cog):
             )
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
+
+    @commands.cooldown(2,60,BucketType.user)
+    @commands.command(name="apod", usage="-apod")
+    async def apod(self, ctx):
+        """Astronomy Picture of the Day"""
+        with urllib.request.urlopen(f'https://api.nasa.gov/planetary/apod?api_key={config["nasa_api"]}') as url:
+            space = json.loads(url.read().decode())
+        embed= discord.Embed(
+                title='Space Facts',
+                description= f'{space["title"]}\n\n{space["explanation"]}',
+                colour= discord.Color.purple()
+            )
+        embed.add_field(name='Date', value=space['date'])
+        try:
+            embed.add_field(name='Copyright', value=space['copyright'])
+        except:
+            pass
+
+        try:
+            embed.set_image(url=space['hdurl'])
+        except:
+            embed.set_image(url=space['url'])
+
+        embed.set_footer(text=config["siffredi_footer"])
+        await ctx.send(embed=embed)
+
+    @commands.cooldown(1,150,BucketType.user)
+    @commands.command(name="tinyurl", usage="-tinyurl [url]" , aliases=['url'])
+    async def tinyurl(self, ctx, url: str):
+        """Shorten your url"""
+        request = requests.get(f'http://tinyurl.com/api-create.php?url={url}')
+        if request.text == "Error":
+            embed = discord.Embed(
+                title='Error',
+                description= f'{ctx.author.mention}, I could not shorten your url. Please make sure you have a valid url.',
+                colour= discord.Color.red()
+            )
+            await ctx.send(embed=embed)
+        else:
+            embed= discord.Embed(
+                title='Shorten URL',
+                description= f'{request.text}',
+                colour= discord.Color.purple()
+            )
+            embed.set_footer(text=config["siffredi_footer"])
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Utilities(bot))

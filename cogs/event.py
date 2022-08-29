@@ -18,7 +18,7 @@ class Events(commands.Cog):
     async def on_guild_join(self, guild):
         mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
         mycursor = mydb.cursor()
-        mycursor.execute("INSERT INTO main_guilds (guild_id, guild_name, guild_icon_id, prefix) VALUES (%s, %s, %s,'-')", (str(guild.id), guild.name, guild.icon))
+        mycursor.execute("INSERT INTO main_guilds (guild_id, guild_name, guild_icon_id, prefix, music_time_left) VALUES (%s, %s, %s,'-', 150)", (str(guild.id), guild.name, guild.icon))
         mydb.commit()
 
     @commands.Cog.listener()
@@ -65,12 +65,22 @@ class Events(commands.Cog):
             embed.add_field(name=f'Take it easy', value=_message)
             await ctx.send(embed=embed)
 
+        elif isinstance(error, commands.MissingRequiredArgument):
+            _message = "You are missing a required argument."
+            embed.add_field(name=f'Missing Required Argument', value=_message)
+            await ctx.send(embed=embed)
+
+        elif isinstance(error, commands.BadArgument):
+            _message = "You have provided an invalid argument."
+            embed.add_field(name=f'Invalid Argument', value=_message)
+            await ctx.send(embed=embed)
+
         else:
             logger = DiscordLogs().logger
             logger.warning(error)
 
             embed.add_field(name = f':x: Terminal Error', value = f"```{error}``` [Join the Support Server for Help](https://siffredi.altervista.org/redirect/support)", inline=False)
-            await ctx.send(embed = embed)  
+            await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(Events(bot))

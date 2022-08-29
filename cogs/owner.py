@@ -24,7 +24,6 @@ class Owner(commands.Cog):
     @commands.command(name="unload", hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, *, cog: str):
-        print(cog)
         try:
             self.bot.unload_extension(cog)
         except Exception as e:
@@ -60,17 +59,23 @@ class Owner(commands.Cog):
     @commands.command(name="guilds", hidden=True)
     @commands.is_owner()
     async def guilds(self, ctx):
-        guilds = self.bot.guilds
-        for guild in guilds:
-            print(guild.name, guild.id, guild.icon, guild.member_count)
-        await ctx.send('Guilds updated.')
-
-    @commands.command(name='commands', hidden=True)
-    @commands.is_owner()
-    async def commands(self, ctx):
-
         mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
         mycursor = mydb.cursor()
+        mycursor.execute("DELETE FROM main_guilds")
+        guilds = self.bot.guilds
+        for guild in guilds:
+            mycursor.execute("INSERT INTO main_guilds (guild_id, guild_name, guild_icon_id, prefix, music_time_left) VALUES (%s, %s, %s, %s, %s)", (str(guild.id), str(guild.name), str(guild.icon), "-",150,))
+            mydb.commit()
+        mycursor.close()
+        mydb.close()
+        await ctx.send('Guilds updated.')
+
+    @commands.command(name="commands", hidden=True)
+    @commands.is_owner()
+    async def commands(self, ctx):
+        mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+        mycursor = mydb.cursor()
+        mycursor.execute("DELETE FROM commands_command")
 
         id = 1
         for cmd in self.bot.commands:
@@ -79,6 +84,9 @@ class Owner(commands.Cog):
             val = (int(id), str(cmd.name), str(cmd.help), str(cmd.usage), str(cmd.cog_name), str(cmd.aliases))
             mycursor.execute(sql, val)
             mydb.commit()
+        mycursor.close()
+        mydb.close()
+        await ctx.send('Commands updated.')
 
 def setup(bot):
     bot.add_cog(Owner(bot))

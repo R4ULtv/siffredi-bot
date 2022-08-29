@@ -31,7 +31,7 @@ class StrawPoll(commands.Cog):
         message = message[last+1:]
         return self.find_options(message, options) 
 
-    @commands.command(name="strawpoll", usage="-strawpoll [title] Optional[Optiona1] Optional[Optiona2]")
+    @commands.command(name="strawpoll", usage="-strawpoll {title} Optional[Optiona1] Optional[Optiona2]")
     @commands.cooldown(2,60,BucketType.user) 
     async def strawpoll(self, ctx):
         """You can create a strawpoll"""

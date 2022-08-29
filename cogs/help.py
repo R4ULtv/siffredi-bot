@@ -4,6 +4,7 @@ import json
 import datetime
 from discord.utils import get
 from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
 
 # CONFIG FILE
 with open('config.json') as config_file:
@@ -19,6 +20,7 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.cooldown(3,60,BucketType.user)
     @commands.command(name='help', usage="-help Optional[command name]")
     async def help(self, ctx, cmd: Optional[str]):
         """Yo you need Help with Help wtf"""
@@ -40,13 +42,18 @@ class Help(commands.Cog):
             if(command := get(self.bot.commands, name=cmd)):
                 embed= discord.Embed(
                     title=f'{cmd.upper()}', 
-                    description=f'*{command.help}*',
+                    description=f'*{command.help}*\n\n**Usage**\n{command.usage}\n\n**Aliases**\n{command.aliases}',
                     colour= discord.Color.purple()
                 )
                 embed.set_footer(text=config["siffredi_footer"])
                 await ctx.send(embed=embed)
             else:
-                await ctx.send('That command does not exist.')
+                embed= discord.Embed(
+                    title='',
+                    description=f'The *{cmd}* command does not exist.',
+                    colour= discord.Color.red()
+                )
+                await ctx.send(embed=embed)
 
 
 def setup(bot):
