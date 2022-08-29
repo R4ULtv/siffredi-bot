@@ -6,7 +6,6 @@ import os
 import json
 import time
 import mysql.connector
-from rich.progress import track
 
 from logs import DiscordLogs
 
@@ -26,7 +25,9 @@ class SiffrediBot(commands.AutoShardedBot):
         super().__init__(
             command_prefix = get_prefix,
             status = discord.Status.online,
-            activity = discord.Game('-help'))
+            activity = discord.Game('-help'), 
+            case_insensitive=True
+        )
         self.config = config
         self.shard_count = self.config["shards"]["count"]
         shard_ids_list = []
@@ -39,27 +40,36 @@ class SiffrediBot(commands.AutoShardedBot):
 
         self.remove_command("help")
         
-        for filename in track(os.listdir('./cogs'), description=f"Loading..."):
+        for filename in os.listdir('./cogs'):
             if filename.endswith('.py'):
                 try:
-                    super().load_extension(f'cogs.{filename[:-3]}')
-                    print(f"Loaded Cog: {filename}")
-                    time.sleep(0.05)
-                    
+                    super().load_extension(f'cogs.{filename[:-3]}')           
                 except Exception:
                     raise Exception
+        print('==> All Cogs Loaded')
+
+        mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
+        mycursor = mydb.cursor()
+        mycursor.execute("DELETE FROM commands_command")
+        for cmd in self.commands:
+            sql = "INSERT INTO commands_command (name, description, syntax, type, aliases) VALUES (%s, %s, %s, %s, %s)"
+            val = (str(cmd.name), str(cmd.help), str(cmd.usage), str(cmd.cog_name), str(cmd.aliases))
+            mycursor.execute(sql, val)
+            mydb.commit()
+        print('==> All Commands Loaded')
+        mycursor.close()
+        mydb.close()
 
     async def on_ready(self):
         self.http_session = aiohttp.ClientSession()
-        print("========================================================================================================================\n")
-        print(f"                                                   {self.user.name} IS READY ")
-        print(f"                                               WITH ID = {self.user.id}" )
-        print(f"                                                    By Raul Carini")
-        print("\n========================================================================================================================\n")
+        print("===============================================================================================\n")
+        print(f'\t\tLogged in as: {self.user.name} | {self.user.id} | Version: {discord.__version__}')
+        print(f'\t\t\t\tShard count: {self.shard_count} | Shard ids: {self.shard_ids}')
+        print(f"\t\t\t\t\tBy Raul Carini")
+        print("\n===============================================================================================\n")
 
         logger = DiscordLogs().logger
         logger.info(f'{self.user.name} is online. With id : {self.user.id}.')
-
 
     async def on_message(self, message):
         if not message.author.bot:

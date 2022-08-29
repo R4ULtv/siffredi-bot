@@ -1,5 +1,3 @@
-# usage: python launcher.py num_shards first_shard_id:last_shard_id
-
 from bot import SiffrediBot
 import json
 

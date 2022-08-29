@@ -6,15 +6,16 @@
         "last_shard_id": 0
     },
     "aws":{
-        "host": "",
-        "user": "",
-        "password": "",
-        "database": ""
+        "host": "SQL_DATABASE",
+        "user": "USERNAME",
+        "password": "PASSWORD",
+        "database": "DATABASE_NAME"
     },
-    "siffredi_footer" : "",
-    "fun_guild_id" : "",
-    "sp_apihost" : "",
-    "sp_apikey" : "",
-    "sp_pageid" : "",
-    "sp_metricid" : ""
+    "siffredi_footer" : "Siffredi Bot v2.1",
+    "sp_apihost" : "STATUS_PAGE_API",
+    "sp_apikey" : "STATUS_PAGE_API_KEY",
+    "sp_pageid" : "STATUS_PAGE_PAGE_ID",
+    "sp_metricid" : "STATUS_PAGE_METRIC_ID",
+    "owak" : "OPEN_WEATHER_API",
+    "nasa_api" : "NASA_API"
 }

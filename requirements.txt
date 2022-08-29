@@ -1,8 +1,6 @@
-discord.py[voice]
-rich
+discord.py[voice]==1.7.3
 youtube-dl
 aiohttp
-bs4
 requests
 forex_python
 mysql.connector
