@@ -1,3 +1,4 @@
+from ast import alias
 import discord
 from discord.ext import commands
 import json
@@ -69,10 +70,10 @@ class Owner(commands.Cog):
         mycursor.close()
         mydb.close()
         await ctx.send('Guilds updated.')
-
-    @commands.command(name="commands", hidden=True)
+    
+    @commands.command(name="cmds", hidden=True)
     @commands.is_owner()
-    async def commands(self, ctx):
+    async def cmds(self, ctx):
         mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
         mycursor = mydb.cursor()
         mycursor.execute("DELETE FROM commands_command")
@@ -87,6 +88,21 @@ class Owner(commands.Cog):
         mycursor.close()
         mydb.close()
         await ctx.send('Commands updated.')
+
+    @commands.command(name="announcement", aliases=['anc'],  hidden=True)
+    @commands.is_owner()
+    async def announcement(self, ctx, *, message):
+        for guild in self.bot.guilds:
+            embed = discord.Embed(
+                title = 'Announcement',
+                description = message,
+                colour= discord.Color.purple()
+            )
+            embed.set_footer(text=config["siffredi_footer"])
+            try:
+                await guild.system_channel.send(embed=embed)
+            except:
+                pass
 
 def setup(bot):
     bot.add_cog(Owner(bot))

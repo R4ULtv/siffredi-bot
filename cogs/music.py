@@ -45,9 +45,20 @@ ytdl = YoutubeDL(ytdlopts)
 class VoiceConnectionError(commands.CommandError):
     """Custom Exception class for connection errors."""
 
+    def message(self):
+        return 'Voice Connection Error'
+
+class NoSongPlaying(VoiceConnectionError):
+    """Custom Exception class for currently playing anything errors."""
+
+    def message(self):
+        return 'No Song Playing'
 
 class InvalidVoiceChannel(VoiceConnectionError):
     """Exception for cases of invalid Voice Channels."""
+    
+    def message(self):
+        return 'Invalid Voice Channel'
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
@@ -319,7 +330,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_playing():
-            return await ctx.send('I am not currently playing anything!')
+            raise NoSongPlaying('I am not currently playing anything!')
         elif vc.is_paused():
             return
 
@@ -338,7 +349,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently playing anything!', )
+            raise NoSongPlaying('I am not currently playing anything!')
         elif not vc.is_paused():
             return
 
@@ -357,7 +368,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently playing anything!')
+            raise NoSongPlaying('I am not currently playing anything!')
 
         if vc.is_paused():
             pass
@@ -379,11 +390,16 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!')
+            raise VoiceConnectionError('I am not currently connected to voice!')
 
         player = self.get_player(ctx)
         if player.queue.empty():
-            return await ctx.send('There are currently no more queued songs.')
+            embed= discord.Embed(
+                title='', 
+                description= f'There are currently no more queued songs.',
+                colour= discord.Color.red()
+            )
+            return await ctx.send(embed=embed)
 
         # Grab up to 5 entries from the queue...
         upcoming = list(itertools.islice(player.queue._queue, 0, 5))
@@ -401,22 +417,23 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!', )
+            raise VoiceConnectionError('I am not currently connected to voice!', )
 
         player = self.get_player(ctx)
         if not player.current:
-            return await ctx.send('I am not currently playing anything!')
+            raise NoSongPlaying('I am not currently playing anything!')
 
-        #try:
+        try:
             # Remove our previous now_playing message.
             await player.np.delete()
-        #except discord.HTTPException:
+        except discord.HTTPException:
             pass
         embed= discord.Embed(
             title='Now Playing:', 
             description= f'[{vc.source.title}]({vc.source.web_url}) \n'f' [<@{vc.source.requester.id}>]',
             colour= discord.Color.purple()
         )
+        embed.set_image(url=vc.source.thumbnail)
         embed.set_footer(text=config["siffredi_footer"])
         player.np = await ctx.send(embed=embed)
 
@@ -427,10 +444,15 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!', )
+            raise VoiceConnectionError('I am not currently connected to voice!', )
 
         if not 0 < vol < 101:
-            return await ctx.send('Please enter a value between 1 and 100.')
+            embed= discord.Embed(
+                title='', 
+                description= f'<@{ctx.author.id}>: Please enter a value between 1 and 100.',
+                colour= discord.Color.red()
+            )
+            return await ctx.send(embed=embed)
 
         player = self.get_player(ctx)
 
@@ -461,7 +483,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently playing anything!')
+            raise NoSongPlaying('I am not currently playing anything!')
 
         await self.cleanup(ctx.guild)
 
@@ -473,12 +495,16 @@ class Music(commands.Cog):
         mycursor = mydb.cursor()
         mycursor.execute("SELECT * FROM main_song ORDER BY time_played DESC LIMIT 10")
         myresult = mycursor.fetchall()
+        string = ''
+        for index, song in enumerate(myresult):
+            string += f'**{index+1}**. [{song[1]}]({song[2]})\n'
+
         embed= discord.Embed(
-            title='Top 10 Songs of Siffredi Bot',
+            title='Top 10 best songs of Siffredi Bot',
+            description= f'Full list of songs can be found here: https://siffredi.bot/songs\n\n {string}',
             colour= discord.Color.purple()
         )
-        for index, song in enumerate(myresult):
-            embed.add_field(name=f'{index+1}.', value=f'[{song[1]}]({song[2]})', inline=False)
+        
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 

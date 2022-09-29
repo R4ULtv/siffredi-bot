@@ -28,15 +28,16 @@ class Help(commands.Cog):
             embed= discord.Embed(
                 title='', 
                 description= 
-                f'Siffredi oltre a essere un porno-attore è un bot divertente creato interamente da una persona [IO](https://www.raulcarini.com); ho {age_years} anni, faccio una scuola di informatica ma qua di bot e python non si vedono neanche con un binocolo così mi sono dediacato allo studio tramite tutte le documentazioni di [python](https://www.python.org/doc/) e  [discord.py](https://discordpy.readthedocs.io/en/latest/index.html).\n'
-                f'\n''**Commands**\n' 'Un elenco completo dei comandi è disponibile [qui](http://siffredi.altervista.org/commands/).\n'
-                f'\n''**Add to Discord**\n''Siffredi Bot può essere aggiunto a tutti i server che desideri! \n' '[Clicca qui per aggiungerlo al tuo](https://siffredi.altervista.org/redirect/invite).\n'
-                f'\n''**Premium**\n''Attualmente non attivo nessun servizio premium ma in futuro potrà essere attuato un servizio a pagamento.\n'
-                f'\n''**Support**\n''[Fai clic qui](https://siffredi.altervista.org/redirect/support) per parlare con il supporto se hai problemi o hai domande.\n',
+                f'Besides being a porn actor, Siffredi is a funny bot created entirely by [me](https://www.instagram.com/lil.poop__/); I am {age_years} years old, I do a computer science school but here bots and python are not seen even with binoculars so I devoted myself to studying through all the documentation of [python](https://www.python.org/doc/) and [discord.py](https://discordpy.readthedocs.io/en/latest/index.html).\n'
+                f'\n**Issues**\nIf you have any problems with the bot, report it [here](https://github.com/R4ULtv/siffredi-bot/issues).\n'
+                f'\n**Commands**\nA complete list of commands is available [here](http://siffredi.altervista.org/commands/).\n'
+                f'\n**Add to Discord**\nSiffredi Bot can be added to as many servers as you want, [Click here to add it to yours](https://siffredi.altervista.org/redirect/invite).\n'
+                f'\n**Premium**\nCurrently no premium service is active but in the future a paid service may be implemented.\n'
+                f'\n**Support**\n[Click here](https://siffredi.altervista.org/redirect/support) to speak to support if you have any problems or questions.\n',
                 colour= discord.Color.purple()
             )
             embed.set_footer(text=config["siffredi_footer"])
-            embed.set_author(name='Siffredi Bot',icon_url='https://cdn.discordapp.com/attachments/691220858638827523/746134348427690074/magik.png')
+            embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             await ctx.send(embed=embed)
         else:
             if(command := get(self.bot.commands, name=cmd)):

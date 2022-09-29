@@ -26,7 +26,7 @@ class Utilities(commands.Cog):
         """You can join my server for help"""
         embed= discord.Embed(
             title='Join into my server for help', 
-            description= f' :arrow_forward: http://siffrdi.vpsgh.it/support', 
+            description= f' :arrow_forward: https://siffredi.altervista.org/redirect/support', 
             colour= discord.Color.purple()
         )
         embed.set_footer(text=config["siffredi_footer"])
@@ -119,6 +119,15 @@ class Utilities(commands.Cog):
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 
+    @commands.cooldown(3,30,BucketType.user)
+    @commands.command(name="flip", aliases=['f'], usage="-flip")
+    async def flip(self, ctx):
+        """Flip a coin"""
+        list = ['heads', 'tails']
+        rand = list[random.randint(0,1)]
+        embed = discord.Embed(title='', description= f'{rand}', colour= discord.Color.purple())
+        await ctx.send(embed=embed)
+
     @commands.cooldown(2,60,BucketType.user) 
     @commands.command(name="convert", usage="-convert [from currency] [to currency]", aliases=['cc','currency'])
     async def convert(self, ctx, amount: int, from_currency: str, to_currency: str):
@@ -180,6 +189,29 @@ class Utilities(commands.Cog):
             )
             embed.set_footer(text=config["siffredi_footer"])
             await ctx.send(embed=embed)
+
+    @commands.cooldown(2,30,BucketType.user)
+    @commands.command(name="version", usage="-version", aliases=['ver', 'whatsnew'])
+    async def version(self, ctx, version: str):
+        """Show what's new about Siffredi Bot"""
+
+        with open('version.json') as config_file:
+            versions = json.load(config_file)
+
+        for v in versions:
+            if v['name'] == version:
+                embed=discord.Embed(
+                    title='What\'s New ?',
+                    description= f'The main news are listed below, to see all the news look [here]({v["project_url"]}).\n Current Version: **2.2** - Next Version: **3.0**\n\n News about Version {v["name"]}: \n',
+                    colour= discord.Color.purple()
+                )
+                for fiedl in v["fiedls"]:
+                    embed.add_field(name=fiedl["name"], value=fiedl["value"], inline=False)
+                embed.set_image(url=v["image_url"])
+                embed.set_footer(text=config["siffredi_footer"])
+                await ctx.send(embed=embed)
+                return
+        
 
 def setup(bot):
     bot.add_cog(Utilities(bot))
