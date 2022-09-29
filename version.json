@@ -1,0 +1,98 @@
+[
+    {
+        "name" : "2.0",
+        "project_url" : "https://github.com/R4ULtv/siffredi-bot/milestone/3?closed=1",
+        "image_url" : "https://siffredi.altervista.org/images/version/v2.0.png",
+        "fiedls" : [
+            {
+                "name" : "Prefixes",
+                "value" : "Added the ability to change the prefixes of the bot."
+            },
+            {
+                "name" : "Poll and Strawpoll",
+                "value" : "Added the ability to create a poll and strawpoll."
+            },
+            {
+                "name" : "Help",
+                "value" : "Added the ability to see the help of each command."
+            },
+            {
+                "name" : "Rock Paper Scissors",
+                "value" : "Added the ability to play Rock Paper Scissors."
+            }
+        ]
+    },
+    {
+        "name" : "2.1",
+        "project_url" : "https://github.com/R4ULtv/siffredi-bot/milestone/5?closed=1",
+        "image_url" : "https://siffredi.altervista.org/images/version/v2.1.png",
+        "fiedls" : [
+            {
+                "name" : "Weather",
+                "value" : "Added the ability to get the weather of a city."
+            },
+            {
+                "name" : "Apod",
+                "value" : "Added the ability to get the Astronomy Picture of the Day."
+            },
+            {
+                "name" : "Case Sensitive",
+                "value" : "Now the commands are case sensitive, you no longer have to worry if you misspell in capital letters."
+            },
+            {
+                "name" : "Top Songs",
+                "value" : "Added the ability to get the most played song of the bot."
+            },
+            {
+                "name" : "TinyURL",
+                "value" : "Added the ability to shorten your url."
+            }
+        ]
+    },
+    {
+        "name" : "2.2",
+        "project_url" : "https://github.com/R4ULtv/siffredi-bot/milestone/6?closed=1",
+        "image_url" : "https://siffredi.altervista.org/images/version/v2.2.png",
+        "fiedls" : [
+            {
+                "name" : "Version",
+                "value" : "Added the ability to get the news about a version of the bot."
+            },
+            {
+                "name" : "Guess Game",
+                "value" : "You can now play the guess game."
+            },
+            {
+                "name" : "Hangman",
+                "value" : "The hangman game is now available."
+            },
+            {
+                "name" : "8 Ball",
+                "value" : "The 8 ball game is now implemented."
+            },
+            {
+                "name" : "Coin Flip",
+                "value" : "Now you can flip a coin."
+            }
+        ]
+    },
+    {
+        "name" : "3.0",
+        "project_url" : "https://github.com/R4ULtv/siffredi-bot/milestone/8?closed=1",
+        "image_url" : "https://siffredi.altervista.org/images/version/v2.2.png",
+        "fiedls" : [
+            {
+                "name" : "Slash Commands",
+                "value" : "Now you can to use slash commands."
+            },
+            {
+                "name" : "Buttons",
+                "value" : "The buttons are implemented."
+            },
+            {
+                "name" : "Shuffle and Loop Commands",
+                "value" : "Shuffle and loop commands are added to the bot."
+            }
+        ]
+    }
+]
