@@ -79,20 +79,29 @@
     {
         "name" : "3.0",
         "project_url" : "https://github.com/R4ULtv/siffredi-bot/milestone/8?closed=1",
-        "image_url" : "https://siffredi.altervista.org/images/version/v2.2.png",
+        "image_url" : "https://siffredi.altervista.org/images/version/v3.0.png",
         "fiedls" : [
             {
                 "name" : "Slash Commands",
                 "value" : "Now you can to use slash commands."
             },
             {
-                "name" : "Buttons",
-                "value" : "The buttons are implemented."
+                "name" : "Shuffle and Loop Commands",
+                "value" : "Shuffle and Loop commands are added to the bot."
             },
             {
-                "name" : "Shuffle and Loop Commands",
-                "value" : "Shuffle and loop commands are added to the bot."
+                "name" : "Next and Remove Commands",
+                "value" : "With next you can play a song next to the current one, with remove you can delete a song in a queue."
+            },
+            {
+                "name" : "Filter",
+                "value" : "Now you can put a filter on the songs."
+            },
+            {
+                "name" : "Spotify Support",
+                "value" : "Now you can play a song with spotify link."
             }
+
         ]
     }
 ]

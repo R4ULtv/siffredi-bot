@@ -11,7 +11,7 @@
         "password": "PASSWORD",
         "database": "DATABASE_NAME"
     },
-    "siffredi_footer" : "Siffredi Bot v2.2",
+    "siffredi_footer" : "Siffredi Bot v3.0-beta",
     "sp_apihost" : "STATUS_PAGE_API",
     "sp_apikey" : "STATUS_PAGE_API_KEY",
     "sp_pageid" : "STATUS_PAGE_PAGE_ID",

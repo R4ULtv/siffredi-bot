@@ -14,8 +14,8 @@ Racommended: install the last version of [Python](https://www.python.org/downloa
 ## 🌟 How to run
 <!--Remove the below lines and add yours -->
 ```Bash
-docker build -t r4ultv/siffredi-bot:2.0 .
-docker run r4ultv/siffredi-bot:2.0
+docker build -t r4ultv/siffredi-bot:3.0 .
+docker run r4ultv/siffredi-bot:3.0
 
 or
 

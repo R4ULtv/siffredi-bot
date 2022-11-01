@@ -4,7 +4,6 @@ from discord.ext import commands
 import aiohttp
 import os
 import json
-import time
 import mysql.connector
 
 from logs import DiscordLogs
@@ -25,13 +24,14 @@ class SiffrediBot(commands.AutoShardedBot):
         super().__init__(
             command_prefix = get_prefix,
             status = discord.Status.online,
-            activity = discord.Game('-help'), 
+            activity = discord.Game('/help | v3.0-beta'),
+            intents= discord.Intents.all(),
             case_insensitive=True
         )
         self.config = config
         self.shard_count = self.config["shards"]["count"]
         shard_ids_list = []
-        shard_ids = []
+        self.shard_ids = []
         
         # create list of shard ids
         for i in range(self.config["shards"]["first_shard_id"], self.config["shards"]["last_shard_id"]+1):
@@ -39,11 +39,12 @@ class SiffrediBot(commands.AutoShardedBot):
         self.shard_ids = tuple(shard_ids_list)
 
         self.remove_command("help")
-        
+
+    async def setup_hook(self):
         for filename in os.listdir('./cogs'):
             if filename.endswith('.py'):
                 try:
-                    super().load_extension(f'cogs.{filename[:-3]}')           
+                    await super().load_extension(f'cogs.{filename[:-3]}')           
                 except Exception:
                     raise Exception
         print('==> All Cogs Loaded')
@@ -61,6 +62,7 @@ class SiffrediBot(commands.AutoShardedBot):
         mydb.close()
 
     async def on_ready(self):
+        await self.tree.sync()
         self.http_session = aiohttp.ClientSession()
         print("===============================================================================================\n")
         print(f'\t\tLogged in as: {self.user.name} | {self.user.id} | Version: {discord.__version__}')
@@ -77,4 +79,4 @@ class SiffrediBot(commands.AutoShardedBot):
 
 
     def run(self):
-        super().run(self.config["discord_token"], reconnect=True)
+        super().run(self.config["discord_token"], reconnect=True, log_handler= None)

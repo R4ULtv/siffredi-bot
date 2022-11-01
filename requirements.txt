@@ -1,5 +1,5 @@
-discord.py[voice]==1.7.3
-youtube-dl
+discord.py[voice]
+wavelink
 aiohttp
 requests
 forex_python
