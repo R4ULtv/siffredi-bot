@@ -30,9 +30,9 @@ class StrawPoll(commands.Cog):
         options.append(message[first:last])
         message = message[last+1:]
         return self.find_options(message, options) 
-
-    @commands.command(name="strawpoll", usage="-strawpoll {title} Optional[Optiona1] Optional[Optiona2]")
+    
     @commands.cooldown(2,60,BucketType.user) 
+    @commands.hybrid_command(name="strawpoll", usage="-strawpoll {title} Optional[Optiona1] Optional[Optiona2]")
     async def strawpoll(self, ctx):
         """You can create a strawpoll"""
         if not ctx.message.author.bot:
@@ -67,5 +67,5 @@ class StrawPoll(commands.Cog):
     async def strawpoll_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(error)
-def setup(bot):
-    bot.add_cog(StrawPoll(bot))
+async def setup(bot):
+    await bot.add_cog(StrawPoll(bot))

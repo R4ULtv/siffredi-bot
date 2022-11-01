@@ -56,5 +56,5 @@ class Loops(commands.Cog):
         mycursor.execute("UPDATE main_data SET value=%s WHERE name=%s", (channel, "channels"))
         mydb.commit()
 
-def setup(bot):
-    bot.add_cog(Loops(bot))
+async def setup(bot):
+    await bot.add_cog(Loops(bot))

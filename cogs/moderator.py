@@ -14,7 +14,7 @@ class Moderator(commands.Cog):
         self.bot = bot
 
     @commands.cooldown(2,300,BucketType.user) 
-    @commands.command(name="prefix", usage="-prefix [!]")
+    @commands.hybrid_command(name="prefix", usage="-prefix [!]")
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix:str):
         """You can change the bot prefix for your server"""
@@ -32,7 +32,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,150,BucketType.user) 
-    @commands.command(name="kick", usage="-kick [member] Optional[reason]")
+    @commands.hybrid_command(name="kick", usage="-kick [member] Optional[reason]")
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member, *, reason=None):
         """You can kick a person"""
@@ -47,7 +47,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,300,BucketType.user) 
-    @commands.command(name="ban", usage="-ban [member] Optional[reason]")
+    @commands.hybrid_command(name="ban", usage="-ban [member] Optional[reason]")
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member : discord.Member, *, reason=None):
         """You can ban a person"""
@@ -61,7 +61,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,150,BucketType.user) 
-    @commands.command(name="unban", usage="-unban [member]")
+    @commands.hybrid_command(name="unban", usage="-unban [member]")
     @commands.has_permissions(administrator=True)
     async def unban(self, ctx, *, member):
         """You can unban a person"""
@@ -85,7 +85,7 @@ class Moderator(commands.Cog):
     async def clear(self, ctx, amount: int):
         """You can delete messages"""
         if amount < 500:
-            await ctx.channel.purge(limit=amount+1)
+            await ctx.channel.purge(limit=amount)
         else:
             embed= discord.Embed(
                 title=':warning: Error:',
@@ -95,7 +95,7 @@ class Moderator(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="info", usage="-info [server/user] Optional[@user]")
+    @commands.hybrid_command(name="info", usage="-info [server/user] Optional[@user]")
     @commands.has_permissions(administrator=True)
     async def info(self, ctx, info, user: discord.Member = None):
         """You can get current server information or you can get user info for yourself or someone in the guild"""
@@ -130,7 +130,7 @@ class Moderator(commands.Cog):
         
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="ticket", usage="-ticket [text]")
+    @commands.hybrid_command(name="ticket", usage="-ticket [text]")
     async def ticket(self, ctx , *, arg):
         """You can create a ticket"""
         embed= discord.Embed(
@@ -143,5 +143,5 @@ class Moderator(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Moderator(bot))
+async def setup(bot):
+    await bot.add_cog(Moderator(bot))

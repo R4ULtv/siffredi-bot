@@ -26,7 +26,7 @@ class Events(commands.Cog):
         mydb = mysql.connector.connect( host=config['aws']['host'], user=config['aws']['user'], passwd=config['aws']['password'], database=config['aws']['database'] )
         mycursor = mydb.cursor()
         mycursor.execute("DELETE FROM main_guilds WHERE guild_id=%s", (str(guild.id),))
-        mydb.commit()
+        mydb.commit()          
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -89,5 +89,5 @@ class Events(commands.Cog):
             # embed.add_field(name = f':x: Terminal Error', value = f"```{error}``` [Join the Support Server for Help](https://siffredi.altervista.org/redirect/support)", inline=False)
             # await ctx.send(embed = embed)
 
-def setup(bot):
-    bot.add_cog(Events(bot))
+async def setup(bot):
+    await bot.add_cog(Events(bot))

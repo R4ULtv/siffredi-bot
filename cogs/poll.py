@@ -68,7 +68,7 @@ class Poll(commands.Cog):
     
     #@commands.Cog.listener()
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="poll", usage="-poll {title} Optional[Optiona1] Optional[Optiona2]")
+    @commands.hybrid_command(name="poll", usage="-poll {title} Optional[Optiona1] Optional[Optiona2]")
     # Limit how often a command can be used, (num per, seconds, BucketType.default/user/member/guild/channel/role)
     async def poll(self, ctx):
         """You can create a poll"""
@@ -113,5 +113,5 @@ class Poll(commands.Cog):
                         return "Please make sure you are using the format 'poll: {title} [Option1] [Option2] [Option 3]'"
 
 
-def setup(bot):
-    bot.add_cog(Poll(bot))
+async def setup(bot):
+    await bot.add_cog(Poll(bot))

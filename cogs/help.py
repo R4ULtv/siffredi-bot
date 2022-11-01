@@ -21,10 +21,10 @@ class Help(commands.Cog):
         self.bot = bot
 
     @commands.cooldown(3,60,BucketType.user)
-    @commands.command(name='help', usage="-help Optional[command name]")
-    async def help(self, ctx, cmd: Optional[str]):
+    @commands.hybrid_command(name='help', usage="-help Optional[command name]")
+    async def help(self, ctx, commands: Optional[str]):
         """Yo you need Help with Help wtf"""
-        if cmd is None:
+        if commands is None:
             embed= discord.Embed(
                 title='', 
                 description= 
@@ -37,12 +37,11 @@ class Help(commands.Cog):
                 colour= discord.Color.purple()
             )
             embed.set_footer(text=config["siffredi_footer"])
-            embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
             await ctx.send(embed=embed)
         else:
-            if(command := get(self.bot.commands, name=cmd)):
+            if(command := get(self.bot.commands, name=commands)):
                 embed= discord.Embed(
-                    title=f'{cmd.upper()}', 
+                    title=f'{commands.upper()}', 
                     description=f'*{command.help}*\n\n**Usage**\n{command.usage}\n\n**Aliases**\n{command.aliases}',
                     colour= discord.Color.purple()
                 )
@@ -51,11 +50,11 @@ class Help(commands.Cog):
             else:
                 embed= discord.Embed(
                     title='',
-                    description=f'The *{cmd}* command does not exist.',
+                    description=f'The *{commands}* command does not exist.',
                     colour= discord.Color.red()
                 )
                 await ctx.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Help(bot))
+async def setup(bot):
+    await bot.add_cog(Help(bot))

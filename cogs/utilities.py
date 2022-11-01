@@ -21,7 +21,7 @@ class Utilities(commands.Cog):
         self.bot = bot
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="support", usage="-support")
+    @commands.hybrid_command(name="support", usage="-support")
     async def support(self, ctx):
         """You can join my server for help"""
         embed= discord.Embed(
@@ -33,19 +33,19 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="invite", usage="-invite")
+    @commands.hybrid_command(name="invite", usage="-invite")
     async def invite(self, ctx):
         """You can get the link to add the bot to your server"""
         embed= discord.Embed(
             title='This is the link to invite me to your server', 
-            description= f' :arrow_forward: https://bit.ly/2CvbI33', 
+            description= f' :arrow_forward: [discord.com/siffredi-bot](https://discord.com/api/oauth2/authorize?client_id=744249413202870353&permissions=8&scope=bot%20applications.commands)', 
             colour= discord.Color.purple()
         )
         embed.set_footer(text=config["siffredi_footer"])
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="donation", usage="-donation")
+    @commands.hybrid_command(name="donation", usage="-donation")
     async def donation(self, ctx):
         """Receive the link to be able to donate to support the progress of the bot"""
         embed= discord.Embed(
@@ -57,7 +57,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="ping", usage="-ping")
+    @commands.hybrid_command(name="ping", usage="-ping")
     async def ping(self, ctx):
         """You can see the api ping and the bot server ping"""
         start_time = time.time()
@@ -73,7 +73,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name='weather', aliases=['wth'], usage="-weather [city]")
+    @commands.hybrid_command(name='weather', aliases=['wth'], usage="-weather [city]")
     async def weather(self, ctx, city:str):
         """You can view the weather of the city you want"""
         with urllib.request.urlopen(f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={config["owak"]}') as url:
@@ -94,7 +94,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="password", usage="-password [lenght]", aliases=['psw'])
+    @commands.hybrid_command(name="password", usage="-password [lenght]", aliases=['psw'])
     async def password(self, ctx, length: int):
         """You can generate a password of the length you want"""
         result_str = ''.join(random.choice(string.ascii_letters) for i in range(length))
@@ -107,7 +107,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="dice", usage="-dice")
+    @commands.hybrid_command(name="dice", usage="-dice")
     async def dice(self, ctx):
         """Generates a number between 1 and 6"""
         num = random.randint(1,6)
@@ -120,7 +120,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(3,30,BucketType.user)
-    @commands.command(name="flip", aliases=['f'], usage="-flip")
+    @commands.hybrid_command(name="flip", aliases=['f'], usage="-flip")
     async def flip(self, ctx):
         """Flip a coin"""
         list = ['heads', 'tails']
@@ -129,7 +129,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="convert", usage="-convert [from currency] [to currency]", aliases=['cc','currency'])
+    @commands.hybrid_command(name="convert", usage="-convert [from currency] [to currency]", aliases=['cc','currency'])
     async def convert(self, ctx, amount: int, from_currency: str, to_currency: str):
         """You can convert one currency to another"""
         c = CurrencyRates()
@@ -145,7 +145,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user)
-    @commands.command(name="apod", usage="-apod")
+    @commands.hybrid_command(name="apod", usage="-apod")
     async def apod(self, ctx):
         """Astronomy Picture of the Day"""
         with urllib.request.urlopen(f'https://api.nasa.gov/planetary/apod?api_key={config["nasa_api"]}') as url:
@@ -170,7 +170,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(1,150,BucketType.user)
-    @commands.command(name="tinyurl", usage="-tinyurl [url]" , aliases=['url'])
+    @commands.hybrid_command(name="tinyurl", usage="-tinyurl [url]" , aliases=['url'])
     async def tinyurl(self, ctx, url: str):
         """Shorten your url"""
         request = requests.get(f'http://tinyurl.com/api-create.php?url={url}')
@@ -191,7 +191,7 @@ class Utilities(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.cooldown(2,30,BucketType.user)
-    @commands.command(name="version", usage="-version", aliases=['ver', 'whatsnew'])
+    @commands.hybrid_command(name="version", usage="-version", aliases=['ver', 'whatsnew'])
     async def version(self, ctx, version: str):
         """Show what's new about Siffredi Bot"""
 
@@ -213,5 +213,5 @@ class Utilities(commands.Cog):
                 return
         
 
-def setup(bot):
-    bot.add_cog(Utilities(bot))
+async def setup(bot):
+    await bot.add_cog(Utilities(bot))

@@ -15,7 +15,7 @@ class Games(commands.Cog):
         self.bot = bot
 
     @commands.cooldown(2,60,BucketType.user)
-    @commands.command(name="rockpaperscissors", aliases=['rps'], usage="-rockpaperscissors [choice]")
+    @commands.hybrid_command(name="rockpaperscissors", aliases=['rps'], usage="-rockpaperscissors [choice]")
     async def rock_paper_scissors(self, ctx, choice):
         """Play rock paper scissors"""
         list = ['rock', 'paper', 'scissors']
@@ -45,7 +45,7 @@ class Games(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user)
-    @commands.command(name="hangman", aliases=['hang'], usage="-hangman")
+    @commands.hybrid_command(name="hangman", aliases=['hang'], usage="-hangman")
     async def hangman(self, ctx):
         """Play hangman"""
         with urllib.request.urlopen(f"https://api.wordnik.com/v4/words.json/randomWord?api_key={config['word_api']}") as url:
@@ -83,7 +83,7 @@ class Games(commands.Cog):
         await ctx.send(embed = discord.Embed(title='Hangman :man_standing:', description= f'You lost! The word was: **{word}**', colour= discord.Color.purple()))
         
     @commands.cooldown(3,30,BucketType.user)
-    @commands.command(name="guess", aliases=['guessnumber'], usage="-guess [number]")
+    @commands.hybrid_command(name="guess", aliases=['guessnumber'], usage="-guess [number]")
     async def guess(self, ctx, number:int):
         """Guess a number between 1 and 10"""
         if number == random.randint(1,10):
@@ -95,7 +95,7 @@ class Games(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(3,30,BucketType.user)
-    @commands.command(name="8ball", aliases=['8b'], usage="-8ball [question]")
+    @commands.hybrid_command(name="8ball", aliases=['8b'], usage="-8ball [question]")
     async def eight_ball(self, ctx, *, question):
         """Ask the 8ball a question"""
         list = ['It is certain', 'It is decidedly so', 'Without a doubt', 'Yes definitely', 'You may rely on it', 'As I see it, yes', 'Most likely', 'Outlook good', 'Yes', 'Signs point to yes', 'Reply hazy try again', 'Ask again later', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Don\'t count on it', 'My reply is no', 'My sources say no', 'Outlook not so good', 'Very doubtful']
@@ -105,5 +105,5 @@ class Games(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Games(bot))
+async def setup(bot):
+    await bot.add_cog(Games(bot))
