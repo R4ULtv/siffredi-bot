@@ -1,5 +1,6 @@
 {
 	"discord_token" : "TOKEN",
+    "siffredi_footer" : "Siffredi Bot v3.0",
     "shards": {
         "count": 1,
         "first_shard_id": 0,
@@ -11,11 +12,22 @@
         "password": "PASSWORD",
         "database": "DATABASE_NAME"
     },
-    "siffredi_footer" : "Siffredi Bot v3.0-beta",
-    "sp_apihost" : "STATUS_PAGE_API",
-    "sp_apikey" : "STATUS_PAGE_API_KEY",
-    "sp_pageid" : "STATUS_PAGE_PAGE_ID",
-    "sp_metricid" : "STATUS_PAGE_METRIC_ID",
+    "lavalink": {
+        "host": "SERVER",
+        "port": 443,
+        "password": "SERVER_PASSWORD"
+    },
+    "spotify":{
+        "client_id" : "CLIENT_ID",
+        "client_secret" : "CLIENT_SECRET"
+    },
+    "status_page" : {
+        "apihost" : "API_LINK",
+        "apikey" : "API_KEY",
+        "pageid" : "PAGE_ID",
+        "metricid" : "METRIC_ID"
+    },
     "owak" : "OPEN_WEATHER_API",
-    "nasa_api" : "NASA_API"
+    "nasa_api" : "NASA_API",
+    "word_api" : "WORD_API_GENERATOR"
 }
