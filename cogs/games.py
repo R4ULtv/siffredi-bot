@@ -4,6 +4,7 @@ from discord.ext import commands
 import random
 import urllib.request, json 
 import json
+import typing
 from discord.ext.commands.cooldowns import BucketType
 
 # CONFIG FILE
@@ -16,11 +17,12 @@ class Games(commands.Cog):
 
     @commands.cooldown(2,60,BucketType.user)
     @commands.hybrid_command(name="rockpaperscissors", aliases=['rps'], usage="-rockpaperscissors [choice]")
-    async def rock_paper_scissors(self, ctx, choice):
+    async def rock_paper_scissors(self, ctx, choice: typing.Literal["Rock", "Paper", "Scissors"]):
         """Play rock paper scissors"""
         list = ['rock', 'paper', 'scissors']
         rand = list[random.randint(0,2)]
         answer = ""
+        choice = choice.lower()
         if choice == rand:
             answer = '**tie** :man_shrugging:'
         elif choice == 'rock': 

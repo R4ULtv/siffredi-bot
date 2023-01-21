@@ -1,5 +1,7 @@
 ﻿import discord
 import json
+import typing
+import asyncio
 import mysql.connector
 from discord.ext.commands.cooldowns import BucketType
 from discord.ext import commands
@@ -80,12 +82,17 @@ class Moderator(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.command(name="clear", usage="-clear [number<500]", aliases = ['cl'])
+    @commands.hybrid_command(name="clear", usage="-clear [number<500]", aliases = ['cl'])
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int):
         """You can delete messages"""
+        
         if amount < 500:
             await ctx.channel.purge(limit=amount)
+            embed = discord.Embed(title="", description=f"Deleted **{amount} messages** successfully.", colour= discord.Color.purple())
+            mess = await ctx.send(embed = embed)
+            await asyncio.sleep(2)
+            await mess.delete()
         else:
             embed= discord.Embed(
                 title=':warning: Error:',
@@ -97,14 +104,14 @@ class Moderator(commands.Cog):
     @commands.cooldown(2,60,BucketType.user) 
     @commands.hybrid_command(name="info", usage="-info [server/user] Optional[@user]")
     @commands.has_permissions(administrator=True)
-    async def info(self, ctx, info, user: discord.Member = None):
+    async def info(self, ctx, info:typing.Literal["Server", "User"], user: discord.Member = None):
         """You can get current server information or you can get user info for yourself or someone in the guild"""
 
         user = user or ctx.message.author
         embed = discord.Embed(colour= discord.Color.purple())
         roles = " ".join([role.mention for role in user.roles])
 
-        if info == 'server' or info == 'guild':
+        if info == 'Server':
             embed.add_field(name="Name:", value=str(ctx.guild.name))
             embed.add_field(name="Description:", value=str(ctx.guild.description), inline=False)
             embed.add_field(name="Owner:", value=str(ctx.guild.owner))
@@ -113,7 +120,7 @@ class Moderator(commands.Cog):
             embed.set_footer(text=config["siffredi_footer"])
             await ctx.send(embed=embed)
 
-        elif info == 'user' or info == 'member':
+        elif info == 'User':
             embed.add_field(name="Member:", value=f"{user.mention}")
             embed.add_field(name="Member name", value=f"{user}")
             embed.add_field(name="Member id:", value=f"{user.id}")
@@ -125,7 +132,7 @@ class Moderator(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            embed =  discord.Embed(description="You need to choose between user or server. eg -info server", colour= discord.Color.purple())
+            embed =  discord.Embed(description="You need to choose between user or server. eg -info Server", colour= discord.Color.purple())
             await ctx.send(embed=embed)       
         
 

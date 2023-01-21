@@ -2,6 +2,7 @@ import discord
 import json
 import random
 import string
+import typing
 from forex_python.converter import CurrencyRates
 import time
 import urllib.request, json 
@@ -191,8 +192,8 @@ class Utilities(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.cooldown(2,30,BucketType.user)
-    @commands.hybrid_command(name="version", usage="-version", aliases=['ver', 'whatsnew'])
-    async def version(self, ctx, version: str):
+    @commands.hybrid_command(name="version", usage="-version [version]", aliases=['ver', 'whatsnew'])
+    async def version(self, ctx, version: typing.Literal["3.0", "2.2", "2.1", "2.0"]):
         """Show what's new about Siffredi Bot"""
 
         with open('version.json') as config_file:
@@ -202,16 +203,14 @@ class Utilities(commands.Cog):
             if v['name'] == version:
                 embed=discord.Embed(
                     title='What\'s New ?',
-                    description= f'The main news are listed below, to see all the news look [here]({v["project_url"]}).\n Current Version: **2.2** - Next Version: **3.0**\n\n News about Version {v["name"]}: \n',
+                    description= f'The main news are listed below, to see all the news look [here]({v["project_url"]}).\n Current Version: **3.0** - Next Version: **3.1**\n\n News about Version {v["name"]}: \n',
                     colour= discord.Color.purple()
                 )
                 for fiedl in v["fiedls"]:
                     embed.add_field(name=fiedl["name"], value=fiedl["value"], inline=False)
                 embed.set_image(url=v["image_url"])
                 embed.set_footer(text=config["siffredi_footer"])
-                await ctx.send(embed=embed)
-                return
-        
+                return await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Utilities(bot))

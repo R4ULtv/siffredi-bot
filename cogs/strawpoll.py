@@ -1,3 +1,4 @@
+import json
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
@@ -7,65 +8,32 @@ class StrawPoll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def find_title(self, message):
-        # this is the index of the first character of the title
-        first = message.find('{') + 1
-        # index of the last character of the title
-        last = message.find('}')
-        if first == 0 or last == -1:
-            # TODO: Send a message telling the use how they are using it incorrectly.
-            return "Not using the command correctly"
-        return message[first:last]
-    def find_options(self, message, options):
-        # first index of the first character of the option
-        first = message.find('[') + 1
-        # index of the last character of the title
-        last = message.find(']')
-        if (first == 0 or last == -1):
-            if len(options) < 2:
-                # TODO: Send a message telling the use how they are using it incorrectly.
-                return "Not using the command correctly"
-            else:
-                return options
-        options.append(message[first:last])
-        message = message[last+1:]
-        return self.find_options(message, options) 
-    
     @commands.cooldown(2,60,BucketType.user) 
-    @commands.hybrid_command(name="strawpoll", usage="-strawpoll {title} Optional[Optiona1] Optional[Optiona2]")
-    async def strawpoll(self, ctx):
+    @commands.hybrid_command(name="strawpoll", usage="-strawpoll title option1 option2")
+    async def strawpoll(self, ctx, title:str, option1="Yes", option2="No", option3=None, option4=None):
         """You can create a strawpoll"""
-        if not ctx.message.author.bot:
-            message = ctx.message.clean_content
-
-            title = self.find_title(message)
-
-            options = self.find_options(message, [])
-
-            try:
-                async with self.bot.http_session.post(
-                    "https://strawpoll.com/api/poll",
-                    json={
-                        "poll": {
-                            "title": title,
-                            "answers": options,
-                        }
-                        
+        async with self.bot.http_session.post(
+            "https://api.strawpoll.com/v3/polls",
+            json={
+                "title": title,
+                "poll_options": [
+                    {
+                        "value": option1
                     },
-                    headers={"Content Type": "application/json"},
-                ) as resp:
-                    json = await resp.json()
-                    await ctx.channel.purge(limit=1)
-                    await ctx.message.channel.send(
-                        "https://strawpoll.com/" + str(json["content_id"])
-                    )
+                    {
+                        "value": option2
+                    },
+                    {
+                        "value": option3
+                    },
+                    {
+                        "value": option4
+                    }
+                ]
+            }
+        ) as req:
+            res = await req.json()
+            await ctx.send("https://strawpoll.com/" + str(res["id"]))
 
-            except KeyError:
-                return "Please make sure you are using the format 'strawpoll {title} [Option1] [Option2] [Option 3]'"
-
-    @strawpoll.error
-    async def strawpoll_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(error)
 async def setup(bot):
     await bot.add_cog(StrawPoll(bot))

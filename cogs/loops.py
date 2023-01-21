@@ -21,10 +21,10 @@ class Loops(commands.Cog):
     @tasks.loop(seconds=10)
     async def send_ping(self):
 
-        sp_apihost = config["sp_apihost"]
-        sp_apikey = config["sp_apikey"]
-        sp_pageid = config["sp_pageid"]
-        sp_metricid = config["sp_metricid"]
+        sp_apihost = config["status_page"]["apihost"]
+        sp_apikey = config["status_page"]["apikey"]
+        sp_pageid = config["status_page"]["pageid"]
+        sp_metricid = config["status_page"]["metricid"]
         metric_value = self.bot.latency * 1000
 
         request_url = sp_apihost + "/v1/pages/" + sp_pageid + "/metrics/" + sp_metricid + "/data.json"
