@@ -24,7 +24,7 @@ class SiffrediBot(commands.AutoShardedBot):
         super().__init__(
             command_prefix = get_prefix,
             status = discord.Status.online,
-            activity = discord.Game('/help | v3.0-beta'),
+            activity = discord.Game('/help | v3.0'),
             intents= discord.Intents.all(),
             case_insensitive=True
         )
