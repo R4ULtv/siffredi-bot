@@ -24,13 +24,13 @@ Make sure you complete the [config.json](https://github.com/R4ULtv/siffredi-bot/
 
 ## 🌟 Usage/Examples
 ``` Bash
-docker build -t siffredi-bot .
-docker run siffredi-bot
+  docker build -t siffredi-bot .
+  docker run siffredi-bot
 ```
 or
 
 ``` Bash
-python launcher.py
+  python launcher.py
 ```
 
 ## 📺 Demo
